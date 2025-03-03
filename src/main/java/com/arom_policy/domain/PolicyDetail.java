@@ -14,4 +14,9 @@ public class PolicyDetail {
 
     @OneToOne(mappedBy= "policyDetail", fetch = FetchType.LAZY)
     private Policy policy;
+
+    public void setPolicy(Policy policy) {
+        this.policy = policy;
+        policy.setPolicyDetail(this);
+    }
 }

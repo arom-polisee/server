@@ -1,7 +1,7 @@
 ---
 name: ISSUE_TEMPLATE
-about: Describe this issue template's purpose here.
-title: ''
+about: 이슈템플릿입니다
+title: "[Feat] ex) 로그인 기능"
 labels: ''
 assignees: ''
 

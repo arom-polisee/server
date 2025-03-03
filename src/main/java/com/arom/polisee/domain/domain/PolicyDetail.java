@@ -1,4 +1,4 @@
-package com.arom_policy.domain;
+package com.arom.polisee.domain.domain;
 
 import jakarta.persistence.*;
 import lombok.Getter;

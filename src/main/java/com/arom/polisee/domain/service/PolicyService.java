@@ -1,11 +1,11 @@
-package com.arom_policy.service;
+package com.arom.polisee.domain.service;
 
-import com.arom_policy.domain.Policy;
-import com.arom_policy.domain.PolicyDetail;
-import com.arom_policy.dto.PolicyDetailResponseDto;
-import com.arom_policy.dto.PolicyResponseDto;
-import com.arom_policy.repository.PolicyRepository;
-import com.arom_policy.repository.PolicyDetailRepository;
+import com.arom.polisee.domain.domain.Policy;
+import com.arom.polisee.domain.domain.PolicyDetail;
+import com.arom.polisee.domain.dto.PolicyDetailResponseDto;
+import com.arom.polisee.domain.dto.PolicyResponseDto;
+import com.arom.polisee.domain.repository.PolicyDetailRepository;
+import com.arom.polisee.domain.repository.PolicyRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

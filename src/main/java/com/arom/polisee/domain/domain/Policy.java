@@ -1,8 +1,7 @@
-package com.arom_policy.domain;
+package com.arom.polisee.domain.domain;
 
 import jakarta.persistence.*;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
 @Getter

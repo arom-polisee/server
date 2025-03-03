@@ -1,6 +1,6 @@
-package com.arom_policy.repository;
+package com.arom.polisee.domain.repository;
 
-import com.arom_policy.domain.PolicyDetail;
+import com.arom.polisee.domain.domain.PolicyDetail;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import org.springframework.stereotype.Repository;

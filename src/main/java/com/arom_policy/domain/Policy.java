@@ -17,7 +17,7 @@ public class Policy {
     private String name;
 
     @OneToOne
-    @JoinColumn(name="policy")
+    @JoinColumn(name="policy_detail")
     private PolicyDetail policyDetail;
 
     protected Policy() {

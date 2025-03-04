@@ -26,3 +26,6 @@ logging:
   level:
     root: INFO
     com.arom_policy: INFO
+
+api:
+  key: ${API_KEY}

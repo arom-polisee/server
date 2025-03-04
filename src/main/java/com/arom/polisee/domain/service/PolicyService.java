@@ -1,5 +1,6 @@
 package com.arom.polisee.domain.service;
 
+import com.arom.polisee.domain.config.AppConfig;
 import com.arom.polisee.domain.domain.Policy;
 import com.arom.polisee.domain.domain.PolicyDetail;
 import com.arom.polisee.domain.dto.PolicyDetailResponseDto;
@@ -26,11 +27,12 @@ public class PolicyService {
 
     private final PolicyRepository policyRepository;
     private final PolicyDetailRepository policyDetailRepository;
+    private final AppConfig appConfig;
 
     private static final String BASE_URL = "https://api.odcloud.kr/api";
     private static final String POLICY_API = "/gov24/v3/supportConditions";
     private static final String POLICY_DETAIL_API = "/gov24/v3/serviceList";
-    private static final String API_KEY = "alJzQFG66OGwXQwLdSHNo0iEMEiyl+UF7XVBcEDLj17L2nGYdv6thwx1o5SxZA0R689p/1wSEzfjXF6V60d8vQ==";
+
 
 
     @Transactional
@@ -55,7 +57,7 @@ public class PolicyService {
 
     private boolean fetchPoliciesDetail(int page, int perPage) {
         try {
-            String encodedServiceKey = URLEncoder.encode(API_KEY, StandardCharsets.UTF_8.toString());
+            String encodedServiceKey = URLEncoder.encode(appConfig.getApiKey(), StandardCharsets.UTF_8.toString());
 
             String urlString = BASE_URL + POLICY_DETAIL_API
                     + "?page=" + page
@@ -94,7 +96,7 @@ public class PolicyService {
 
     private boolean fetchPoliciesList(int page, int perPage) {
         try {
-            String encodedServiceKey = URLEncoder.encode(API_KEY, StandardCharsets.UTF_8.toString());
+            String encodedServiceKey = URLEncoder.encode(appConfig.getApiKey(), StandardCharsets.UTF_8.toString());
 
             String urlString = BASE_URL + POLICY_API
                     + "?page=" + page

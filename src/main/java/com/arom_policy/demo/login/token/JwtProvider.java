@@ -28,4 +28,23 @@ public class JwtProvider {
                 .compact();
     }
 
+    public boolean validateToken(String token) {
+        try {
+            Jwts.parserBuilder().setSigningKey(KEY).build().parseClaimsJws(token);
+            return true;
+        } catch (JwtException | IllegalArgumentException e) {
+            return false;
+        }
+    }
+
+    // JWT에서 사용자 ID 추출
+    public Long getUserIdFromToken(String token) {
+        return Long.valueOf(Jwts.parserBuilder()
+                .setSigningKey(KEY)
+                .build()
+                .parseClaimsJws(token)
+                .getBody()
+                .getSubject());
+    }
+
 }

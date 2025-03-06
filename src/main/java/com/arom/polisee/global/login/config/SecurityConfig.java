@@ -1,6 +1,6 @@
-package com.arom_policy.demo.login.config;
+package com.arom.polisee.global.login.config;
 
-import com.arom_policy.demo.login.token.JwtFilter;
+import com.arom.polisee.global.login.token.JwtFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;

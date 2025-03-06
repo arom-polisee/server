@@ -1,4 +1,4 @@
-package com.arom_policy.demo.login.token;
+package com.arom.polisee.global.login.token;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;

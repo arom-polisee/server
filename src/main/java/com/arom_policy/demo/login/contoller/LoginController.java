@@ -13,7 +13,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
-import java.util.HashMap;
 
 @RestController
 @RequestMapping("/auth")
@@ -21,51 +20,29 @@ import java.util.HashMap;
 @Slf4j
 public class LoginController {
 
-    private final KakaoConfig kakaoConfig;
     private final LoginService loginService;
     private final TokenService tokenService;
 
     @GetMapping("/login")
     public ResponseEntity<Void> getKakaoAuthUrl() {
-        String kakaoAuthUrl = "https://kauth.kakao.com/oauth/authorize"
-                + "?client_id=" + kakaoConfig.getClientId()
-                + "&redirect_uri=" + kakaoConfig.getRedirectUri()
-                + "&response_type=code"
-                + "&scope=profile_nickname";
-
+        String kakaoAuthUrl = tokenService.getKakaoAuthUrl();
         return ResponseEntity.status(HttpStatus.FOUND)
                 .header("Location", kakaoAuthUrl)
                 .build();
     }
 
     @GetMapping(value = "/login/kakao")
-    public BaseResponse<LoginResponseDto> kakaoLogin(@RequestParam(required = false) String code) throws IOException {
+    public ResponseEntity<?> kakaoLogin(@RequestParam(required = false) String code) {
         try {
-            // 카카오 액세스 토큰 요청
-            String accessToken = tokenService.getKakaoAccessToken(code);
-            log.info("카카오 Access Token = {} ", accessToken);
-
-            // 카카오 유저 정보 요청
-            HashMap<String, Object> userInfo = loginService.getUserInfo(accessToken);
-            log.info("카카오 유저 정보 = {} ",userInfo);
-
-            LoginResponseDto loginResponseDto;
-
-            Long kakaoId = Long.valueOf(userInfo.get("id").toString());
-
-            if (loginService.checkKakaoId(kakaoId) == 0) {
-                loginResponseDto = loginService.register(userInfo);
-                log.info("회원 가입 완료 = {}",loginResponseDto);
-
-            } else {
-                loginResponseDto = loginService.getUserInfo(kakaoId);
-                log.info("로그인 성공 = {}",loginResponseDto);
-            }
-            return new BaseResponse<>(loginResponseDto);
-
+            return loginService.loginWithKakao(code); // 서비스에서 JWT 발급 & 쿠키 설정
         } catch (BaseException exception) {
-            return new BaseResponse<>((exception.getStatus()));
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(new BaseResponse<>(exception.getStatus().getMessage())); //  오류 메시지 반환
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new BaseResponse<>("서버 오류 발생")); //  예기치 못한 오류 처리
         }
     }
+
 
 }

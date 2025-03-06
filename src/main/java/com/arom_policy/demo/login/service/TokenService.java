@@ -8,7 +8,10 @@ import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.client.RestTemplate;
+
+import java.util.HashMap;
 
 @Service
 @RequiredArgsConstructor
@@ -42,5 +45,44 @@ public class TokenService {
             e.printStackTrace();
             throw new RuntimeException("카카오 토큰 요청 실패", e);
         }
+    }
+
+    public HashMap<String, Object> getUserInfoFromToken(@RequestHeader("Authorization") String accessToken) {
+        HashMap<String, Object> userInfo = new HashMap<>();
+        String url = "https://kapi.kakao.com/v2/user/me";
+
+        // HTTP 요청 헤더 설정
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Authorization", "Bearer " + accessToken);
+        headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+
+        HttpEntity<String> requestEntity = new HttpEntity<>(headers);
+
+        try {
+            // API 요청 실행
+            ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.POST, requestEntity, String.class);
+
+            // JSON 응답 파싱
+            JsonNode root = objectMapper.readTree(response.getBody());
+            String username = root.path("properties").path("nickname").asText();
+            Long kakaoId = root.path("id").asLong();
+
+            // 사용자 정보 저장
+            userInfo.put("username", username);
+            userInfo.put("id", kakaoId);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return userInfo;
+    }
+
+    public String getKakaoAuthUrl() {
+        return "https://kauth.kakao.com/oauth/authorize"
+                + "?client_id=" + kakaoConfig.getClientId()
+                + "&redirect_uri=" + kakaoConfig.getRedirectUri()
+                + "&response_type=code"
+                + "&scope=profile_nickname";
+
     }
 }

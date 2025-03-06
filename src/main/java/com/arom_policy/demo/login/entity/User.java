@@ -12,8 +12,9 @@ import java.time.LocalDateTime;
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "users")  // ✅ 테이블 이름 명확히 지정
+@Table(name = "users")  //  테이블 이름 명확히 지정
 @Builder
+@ToString
 public class User {
 
     @Id

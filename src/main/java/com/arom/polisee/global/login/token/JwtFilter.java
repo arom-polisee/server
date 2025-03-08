@@ -32,8 +32,8 @@ public class JwtFilter extends OncePerRequestFilter {
 
         // JWT가 유효한 경우
         if (token != null && jwtProvider.validateToken(token)) {
-            Long kakaoId = jwtProvider.getUserIdFromToken(token);
-            request.setAttribute("kakaoId", kakaoId);
+            Long userId = jwtProvider.getUserIdFromToken(token);
+            request.setAttribute("userId", userId);
         }
 
         filterChain.doFilter(request, response);

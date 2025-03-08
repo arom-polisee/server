@@ -2,6 +2,7 @@ package com.arom.polisee.global.login.token;
 
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -10,6 +11,7 @@ import java.util.Date;
 
 
 @Component
+@Slf4j
 public class JwtProvider {
     private final Key KEY;
     private final long ACCESS_TOKEN_EXPIRE_TIME = 1000 * 60 * 60; // 1시간
@@ -30,9 +32,16 @@ public class JwtProvider {
 
     public boolean validateToken(String token) {
         try {
-            Jwts.parserBuilder().setSigningKey(KEY).build().parseClaimsJws(token);
+            Claims claims = Jwts
+                    .parserBuilder()
+                    .setSigningKey(KEY)
+                    .build()
+                    .parseClaimsJws(token)
+                    .getBody();
+            log.info("토큰 검증 완료 - userId: {}, 만료시간: {}", claims.getSubject(),claims.getExpiration());
             return true;
         } catch (JwtException | IllegalArgumentException e) {
+            log.error("JWT 검증 실패: {}", e.getMessage());
             return false;
         }
     }

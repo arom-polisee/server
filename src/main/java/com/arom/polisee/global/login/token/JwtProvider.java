@@ -19,9 +19,9 @@ public class JwtProvider {
     }
 
     // JWT 생성
-    public String createAccessToken(Long kakaoId) {
+    public String createAccessToken(Long userId) {
         return Jwts.builder()
-                .setSubject(String.valueOf(kakaoId))
+                .setSubject(String.valueOf(userId))
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + ACCESS_TOKEN_EXPIRE_TIME))
                 .signWith(SignatureAlgorithm.HS256, KEY)

@@ -39,7 +39,7 @@ public class LoginService {
                 .orElseGet(() -> register(userInfo));
 
         // JWT 생성
-        String jwt = jwtProvider.createAccessToken(user.getKakaoId());
+        String jwt = jwtProvider.createAccessToken(user.getId());
 
         // HTTP-Only 쿠키 설정
         ResponseCookie jwtCookie = ResponseCookie.from("jwt", jwt)

@@ -29,10 +29,7 @@ public class TokenService {
         params.add("redirect_uri", kakaoConfig.getRedirectUri());
         params.add("code", code);
 
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
-
-        HttpEntity<MultiValueMap<String, String>> requestEntity = new HttpEntity<>(params, headers);
+        HttpEntity<MultiValueMap<String, String>> requestEntity = new HttpEntity<>(params, createHeaders());
 
         try {
             ResponseEntity<String> response = restTemplate.exchange(
@@ -52,10 +49,8 @@ public class TokenService {
         String url = "https://kapi.kakao.com/v2/user/me";
 
         // HTTP 요청 헤더 설정
-        HttpHeaders headers = new HttpHeaders();
+        HttpHeaders headers = createHeaders();
         headers.set("Authorization", "Bearer " + accessToken);
-        headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
-
         HttpEntity<String> requestEntity = new HttpEntity<>(headers);
 
         try {
@@ -84,5 +79,11 @@ public class TokenService {
                 + "&response_type=code"
                 + "&scope=profile_nickname";
 
+    }
+
+    private HttpHeaders createHeaders() {
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+        return headers;
     }
 }

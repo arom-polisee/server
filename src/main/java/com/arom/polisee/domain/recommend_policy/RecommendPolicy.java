@@ -1,7 +1,8 @@
-package com.arom.polisee.global.policy;
+package com.arom.polisee.domain.recommend_policy;
 
+import com.arom.polisee.domain.policy_requirements.PolicyRequirements;
 import com.arom.polisee.global.entity.BaseEntity;
-import com.arom.polisee.global.user.User;
+import com.arom.polisee.domain.user.User;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -11,7 +12,8 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @Entity
-public class UserRecommendPolicy extends BaseEntity {
+@Table(name = "recommend_policy")
+public class RecommendPolicy extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,14 +28,9 @@ public class UserRecommendPolicy extends BaseEntity {
     // 어떤 PolicyDetail
     @ManyToOne
     @JoinColumn(name = "service_id", nullable = false)
-    private PolicyDetail policyDetail;
+    private PolicyRequirements policyDetail;
 
-    // 추가 칼럼 예시
-    @Column(name = "recommend_reason")
-    private String recommendReason;
 
-    @Column(name = "recommend_date")
-    private LocalDateTime recommendDate;
 
 
 }

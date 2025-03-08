@@ -1,7 +1,8 @@
-package com.arom.polisee.global.user;
+package com.arom.polisee.domain.user;
 
+import com.arom.polisee.domain.userInfo.UserInfo;
 import com.arom.polisee.global.entity.BaseEntity;
-import com.arom.polisee.global.policy.UserRecommendPolicy;
+import com.arom.polisee.domain.recommend_policy.RecommendPolicy;
 import jakarta.persistence.Entity;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -14,7 +15,7 @@ import java.util.List;
 @Getter
 @Setter
 @Entity
-
+@Table(name = "user")
 public class User extends BaseEntity {
 
 
@@ -38,7 +39,7 @@ public class User extends BaseEntity {
 
     // 2) user_recommend_policy 와 1:N
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<UserRecommendPolicy> recommendPolicies = new ArrayList<>();
+    private List<RecommendPolicy> recommendPolicies = new ArrayList<>();
 }
 
 

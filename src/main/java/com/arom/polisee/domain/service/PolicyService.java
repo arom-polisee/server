@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
@@ -37,12 +38,13 @@ public class PolicyService {
 
     @Transactional
     public void fetchAndSavePolicies(int perPage) {
-        int page = 1;
-        boolean hasMore = true;
 
         // 모든 정책 리스트 가져오기
+        int page = 1;
+        boolean hasMore = true;
         while (hasMore) {
-            hasMore = fetchPoliciesList(page, perPage);
+            String requestURL = setURL(page, perPage, appConfig.getApiKey(), POLICY_API);
+            hasMore = fetchPoliciesList(requestURL);
             page++;
         }
 
@@ -50,27 +52,26 @@ public class PolicyService {
         page = 1;
         hasMore = true;
         while (hasMore) {
-            hasMore = fetchPoliciesDetail(page, perPage);
+            String requestURL = setURL(page, perPage, appConfig.getApiKey(), POLICY_DETAIL_API);
+            hasMore = fetchPoliciesDetail(requestURL);
             page++;
         }
     }
 
-    private boolean fetchPoliciesDetail(int page, int perPage) {
+
+    /**
+     * @param URL
+     * @return boolean
+     * Policy detail을 받아옵니다. 성공 여부를 boolean으로 반환
+     */
+    private boolean fetchPoliciesDetail(String URL) {
         try {
-            String encodedServiceKey = URLEncoder.encode(appConfig.getApiKey(), StandardCharsets.UTF_8.toString());
-
-            String urlString = BASE_URL + POLICY_DETAIL_API
-                    + "?page=" + page
-                    + "&perPage=" + perPage
-                    + "&returnType=json"
-                    + "&serviceKey=" + encodedServiceKey;
-
-            log.info("📌 상세 정책 API 요청: {}", urlString);
-
-            String jsonResponse = sendGetRequest(urlString);
+            log.info("📌 상세 정책 API 요청:", URL);
+            String jsonResponse = sendGetRequest(URL);
             if (jsonResponse == null) return false;
 
             PolicyDetailResponseDto response = parseJsonToPolicyDetailResponse(jsonResponse);
+
             if (response == null || response.getData() == null || response.getData().isEmpty()) {
                 log.info("✅ 상세 정책 데이터 없음, 종료.");
                 return false;
@@ -84,6 +85,7 @@ public class PolicyService {
                 policyDetail.setPolicy(policy);
                 policyDetail.setId(dto.getServiceId());
                 policyDetailRepository.save(policyDetail);
+
             });
 
             return true;
@@ -94,19 +96,12 @@ public class PolicyService {
         }
     }
 
-    private boolean fetchPoliciesList(int page, int perPage) {
+
+    private boolean fetchPoliciesList(String URL) {
         try {
-            String encodedServiceKey = URLEncoder.encode(appConfig.getApiKey(), StandardCharsets.UTF_8.toString());
+            log.info("🚀 정책 목록 API 요청: {}", URL);
 
-            String urlString = BASE_URL + POLICY_API
-                    + "?page=" + page
-                    + "&perPage=" + perPage
-                    + "&returnType=json"
-                    + "&serviceKey=" + encodedServiceKey;
-
-            log.info("🚀 정책 목록 API 요청: {}", urlString);
-
-            String jsonResponse = sendGetRequest(urlString);
+            String jsonResponse = sendGetRequest(URL);
             if (jsonResponse == null) return false;
 
             PolicyResponseDto response = parseJsonToPolicyResponse(jsonResponse);
@@ -175,5 +170,22 @@ public class PolicyService {
             log.error("❌ JSON 파싱 오류 (PolicyDetailResponseDto)", e);
             return null;
         }
+    }
+
+    private String setURL(int page, int perPage, String apiKey, String apiList) {
+        try {
+            String encodedApiKey = URLEncoder.encode(appConfig.getApiKey(), StandardCharsets.UTF_8.toString());
+            String urlString = BASE_URL + apiList
+                    + "?page=" + page
+                    + "&perPage=" + perPage
+                    + "&returnType=json"
+                    + "&serviceKey=" + encodedApiKey;
+            log.info("page:{}, perPage:{}", page, perPage);
+            return urlString;
+
+        } catch (UnsupportedEncodingException e) {
+            throw new IllegalStateException("❌ API_KEY 인코딩 중 오류 발생", e);
+        }
+
     }
 }

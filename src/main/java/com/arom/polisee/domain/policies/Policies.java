@@ -14,11 +14,17 @@ public class Policies {
     @Column(name = "서비스 ID")
     private Long serviceId;  // PK
 
+    @OneToOne
+    @MapsId
+    @JoinColumn(name = "서비스 ID")
+    private PolicyRequirements policyRequirements;
+
+
     @Column(name = "등록일시")
-    private String registerDate;   // 등록 일시 (문자열 예시)
+    private String registerDate;   // 등록 일시
 
     @Column(name = "부서명")
-    private String departmentName; // "부서명"인지 "부처명"인지 스펙 확인 필요
+    private String departmentName;
 
     @Column(name = "상세조회URL")
     private String detailUrl;
@@ -69,6 +75,5 @@ public class Policies {
     private String supportType;
 
 
-    @OneToOne(mappedBy = "policies", cascade = CascadeType.ALL, fetch = FetchType.LAZY, optional = true)
-    private PolicyRequirements policyRequirements;
+
 }

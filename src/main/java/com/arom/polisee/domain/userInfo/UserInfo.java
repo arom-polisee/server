@@ -1,6 +1,7 @@
 package com.arom.polisee.domain.userInfo;
 
 
+import com.arom.polisee.domain.gender.Gender;
 import com.arom.polisee.domain.user.User;
 import com.arom.polisee.global.entity.BaseEntity;
 import jakarta.persistence.Entity;
@@ -15,16 +16,17 @@ import lombok.Setter;
 public class UserInfo extends BaseEntity {
 
     @Id
-    @Column(name = "user_id")
-    private Long userId;
+    @Column(name = "id")
+    private Long id;
 
     @OneToOne
     @MapsId
     @JoinColumn(name = "user_id")
     private User user;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "성별", length = 10)
-    private String gender;
+    private Gender gender;
 
     @Column(name = "나이")
     private Integer age;

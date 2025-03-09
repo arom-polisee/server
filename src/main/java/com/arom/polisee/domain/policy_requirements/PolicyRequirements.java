@@ -1,6 +1,7 @@
 package com.arom.polisee.domain.policy_requirements;
 
 
+import com.arom.polisee.domain.gender.Gender;
 import com.arom.polisee.domain.policies.Policies;
 import com.arom.polisee.domain.recommend_policy.RecommendPolicy;
 import jakarta.persistence.*;
@@ -22,9 +23,7 @@ public class PolicyRequirements {
 
     // Policies와 1:1, PK 공유
 
-    @OneToOne
-    @MapsId
-    @JoinColumn(name = "서비스 ID")
+    @OneToOne(mappedBy = "policyRequirements", cascade = CascadeType.ALL, fetch = FetchType.LAZY, optional = true)
     private Policies policies;
 
     // 서비스명
@@ -32,8 +31,9 @@ public class PolicyRequirements {
     private String serviceName;
 
     // 성별
+    @Enumerated(EnumType.STRING)
     @Column(name = "성별")
-    private String gender;
+    private Gender gender;
 
     // 나이
     @Column(name = "나이")

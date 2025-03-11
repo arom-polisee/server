@@ -1,30 +1,29 @@
-package com.arom_policy.dto;
+package com.arom.polisee.domain.policy_requirements.dto;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
-import lombok.Setter;
 
 @Getter
-@Setter
-@JsonIgnoreProperties(ignoreUnknown = true)
-public class PolicyList1Dto {
+public class PolicyRequirementsDTO2 {
 
     @JsonProperty("서비스ID")
     private String id;
 
     @JsonProperty("서비스명")
     private String name;
+
     @JsonProperty("JA0101")
     private String JA0101;
 
-
     @JsonProperty("JA0102")
     private String JA0102;
+
     @JsonProperty("JA0110")
-    private int JA0110;
+    private String JA0110;
+
     @JsonProperty("JA0111")
-    private int JA0111;
+    private String JA0111;
+
     @JsonProperty("JA0201")
     private String JA0201;
     @JsonProperty("JA0202")
@@ -108,43 +107,8 @@ public class PolicyList1Dto {
     @JsonProperty("JA0414")
     private String JA0414;
 
-    @JsonProperty("JA1101")
-    private String JA1101;
-
-    @JsonProperty("JA1102")
-    private String JA1102;
-
-    @JsonProperty("JA1103")
-    private String JA1103;
-
     @JsonProperty("JA1201")
     private String JA1201;
 
-    @JsonProperty("JA1202")
-    private String JA01202;
-
-    @JsonProperty("JA1299")
-    private String JA1299;
-
-    @JsonProperty("JA2101")
-    private String JA2101;
-
-    @JsonProperty("JA2102")
-    private String JA2102;
-
-    @JsonProperty("JA2103")
-    private String JA2103;
-
-    @JsonProperty("JA2201")
-    private String JA2201;
-
-    @JsonProperty("JA2202")
-    private String JA2202;
-
-    @JsonProperty("JA2203")
-    private String JA2203;
-
-    @JsonProperty("JA2299")
-    private String JA2299;
-
 }
+

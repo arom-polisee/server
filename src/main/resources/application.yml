@@ -9,9 +9,14 @@ spring:
       ddl-auto: update
     show-sql: true
 
+  data:
+    redis:
+      host: localhost
+      port: 6379
+
   kakao:
     client-id: bd6499622dab0cd962a9b5c05eba5135
-    redirect-uri: http://localhost:8080/auth/login/kakao
+    redirect-uri: http://localhost:8080/auth/login/code/kakao
     scope: profile_nickname
     authorization-uri: https://kauth.kakao.com/oauth/authorize
     token-uri: https://kauth.kakao.com/oauth/token

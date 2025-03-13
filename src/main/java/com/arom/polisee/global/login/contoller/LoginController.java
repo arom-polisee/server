@@ -27,7 +27,7 @@ public class LoginController {
                 .build();
     }
 
-    @GetMapping(value = "/login/kakao")
+    @GetMapping(value = "/login/code/kakao")
     public ResponseEntity<?> kakaoLogin(@RequestParam(required = false) String code) {
         try {
             return loginService.loginWithKakao(code); // 서비스에서 JWT 발급 & 쿠키 설정

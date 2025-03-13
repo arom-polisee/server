@@ -1,4 +1,4 @@
-package com.arom.polisee.global.login.token;
+package com.arom.polisee.global.login.jwt;
 
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
@@ -38,10 +38,10 @@ public class JwtProvider {
                     .build()
                     .parseClaimsJws(token)
                     .getBody();
-            log.info("토큰 검증 완료 - userId: {}, 만료시간: {}", claims.getSubject(),claims.getExpiration());
+            log.info("토큰 검증 완료 - userId : {}, 만료시간 : {}", claims.getSubject(),claims.getExpiration());
             return true;
         } catch (JwtException | IllegalArgumentException e) {
-            log.error("JWT 검증 실패: {}", e.getMessage());
+            log.error("JWT 검증 실패 : {}", e.getMessage());
             return false;
         }
     }

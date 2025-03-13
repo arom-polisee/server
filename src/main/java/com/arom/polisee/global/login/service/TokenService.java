@@ -1,6 +1,7 @@
 package com.arom.polisee.global.login.service;
 
 import com.arom.polisee.global.login.config.KakaoConfig;
+import com.arom.polisee.global.login.dto.LoginResponseDto;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
@@ -44,9 +45,9 @@ public class TokenService {
         }
     }
 
-    public HashMap<String, Object> getUserInfoFromToken(@RequestHeader("Authorization") String accessToken) {
-        HashMap<String, Object> userInfo = new HashMap<>();
+    public LoginResponseDto getUserInfoFromToken(@RequestHeader("Authorization") String accessToken) {
         String url = "https://kapi.kakao.com/v2/user/me";
+        LoginResponseDto loginResponseDto = new LoginResponseDto();
 
         // HTTP 요청 헤더 설정
         HttpHeaders headers = createHeaders();
@@ -63,13 +64,13 @@ public class TokenService {
             Long kakaoId = root.path("id").asLong();
 
             // 사용자 정보 저장
-            userInfo.put("username", username);
-            userInfo.put("id", kakaoId);
+            loginResponseDto.setUserId(kakaoId);
+            loginResponseDto.setUsername(username);
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-        return userInfo;
+        return loginResponseDto;
     }
 
     public String getKakaoAuthUrl() {

@@ -15,7 +15,7 @@ import java.time.LocalDateTime;
 @Table(name = "users")  //  테이블 이름 명확히 지정
 @Builder
 @ToString
-public class User {
+public class UserEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)  // AUTO_INCREMENT & PRIMARY KEY
@@ -27,6 +27,9 @@ public class User {
 
     @Column(name = "user_name", nullable = false)
     private String userName;
+
+    @Column(name = "role")
+    private String role;
 
     @Column(name = "created_at", updatable = false)
     @CreationTimestamp

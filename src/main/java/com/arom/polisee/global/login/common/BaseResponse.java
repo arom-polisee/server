@@ -1,9 +1,7 @@
 package com.arom.polisee.global.login.common;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Getter;
 
-@JsonInclude(JsonInclude.Include.NON_NULL)
 @Getter
 public class BaseResponse<T> {
     private boolean success;

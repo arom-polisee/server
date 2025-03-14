@@ -47,7 +47,7 @@ public class TokenService {
 
     public LoginResponseDto getUserInfoFromToken(@RequestHeader("Authorization") String accessToken) {
         String url = "https://kapi.kakao.com/v2/user/me";
-        LoginResponseDto loginResponseDto = new LoginResponseDto();
+        LoginResponseDto loginResponseDto = null;
 
         // HTTP 요청 헤더 설정
         HttpHeaders headers = createHeaders();
@@ -64,8 +64,8 @@ public class TokenService {
             Long kakaoId = root.path("id").asLong();
 
             // 사용자 정보 저장
-            loginResponseDto.setUserId(kakaoId);
-            loginResponseDto.setUsername(username);
+            loginResponseDto = new LoginResponseDto(kakaoId,username);
+
         } catch (Exception e) {
             e.printStackTrace();
         }

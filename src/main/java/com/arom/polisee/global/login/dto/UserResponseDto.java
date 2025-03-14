@@ -1,10 +1,10 @@
 package com.arom.polisee.global.login.dto;
 
 import com.arom.polisee.global.login.entity.UserEntity;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@Data
+@Getter
 @NoArgsConstructor
 public class UserResponseDto {
     private String username;

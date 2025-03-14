@@ -13,6 +13,9 @@ public class PoliciesDTO {
     @JsonProperty("서비스ID")
     private String id;  // PK
 
+    @JsonProperty("서비스명")
+    private String name;
+
     @JsonProperty("등록일시")
     private String registerDate;   // 등록 일시
 
@@ -66,4 +69,7 @@ public class PoliciesDTO {
 
     @JsonProperty("지원유형")
     private String supportType;
+
+    @JsonProperty("사용자구분")
+    private String remarks;
 }

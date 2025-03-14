@@ -3,11 +3,13 @@ package com.arom.polisee.domain.policies.repository;
 import com.arom.polisee.domain.policies.entity.Policies;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
 @Repository
+@Slf4j
 public class PoliciesRepository {
 
     @PersistenceContext
@@ -19,8 +21,6 @@ public class PoliciesRepository {
 
     public void saveAll(List<Policies> policies) {
         for (Policies policy : policies) save(policy);
-        em.flush();
-
     }
 
     public Policies findByPolicyId(String policyId) {

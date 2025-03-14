@@ -1,7 +1,6 @@
 package com.arom.polisee.domain.policy_requirements.entity;
 
 
-import com.arom.polisee.domain.policies.dto.PoliciesDTO;
 import com.arom.polisee.domain.policies.entity.Policies;
 import com.arom.polisee.domain.policy_requirements.dto.PolicyRequirementsDTO;
 import jakarta.persistence.*;
@@ -17,7 +16,7 @@ public class PolicyRequirements {
 
     @Id
     @Column(name = "service_id")
-    private String serviceId;
+    private String id;
 
     // Policies와 1:1, PK 공유
 

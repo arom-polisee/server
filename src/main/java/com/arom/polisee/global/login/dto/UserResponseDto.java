@@ -1,15 +1,12 @@
 package com.arom.polisee.global.login.dto;
 
-import com.arom.polisee.global.login.entity.UserEntity;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import com.arom.polisee.global.login.entity.Role;
+import lombok.*;
 
 @Getter
 @NoArgsConstructor
+@AllArgsConstructor
 public class UserResponseDto {
     private String username;
-
-    public UserResponseDto(UserEntity userEntity) {
-        this.username = userEntity.getUserName();
-    }
+    private Role role;
 }

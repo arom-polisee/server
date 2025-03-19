@@ -1,6 +1,5 @@
 package com.arom.polisee.global.login.dto;
 
-import com.arom.polisee.global.login.entity.UserEntity;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -17,23 +16,22 @@ import java.util.stream.Collectors;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class CustomUserDetails implements UserDetails {
 
-    private final UserEntity userEntity;
+    private final UserDto userDto;
     private final List<SimpleGrantedAuthority> authorities;
 
     @JsonCreator
-    public CustomUserDetails(@JsonProperty("user") UserEntity userEntity,
+    public CustomUserDetails(@JsonProperty("user") UserDto userDto,
                              @JsonProperty("authorities") List<String> roles) {
-        this.userEntity = userEntity;
+        this.userDto = userDto;
         this.authorities = roles.stream()
                 .map(SimpleGrantedAuthority::new)
                 .collect(Collectors.toList());
     }
 
-    public CustomUserDetails(UserEntity userEntity) {
-        this.userEntity = userEntity;
-        this.authorities = List.of(new SimpleGrantedAuthority(userEntity.getRole()));
+    public CustomUserDetails(UserDto userDto) {
+        this.userDto = userDto;
+        this.authorities = List.of(new SimpleGrantedAuthority(userDto.getRole().name()));
     }
-
     @JsonProperty("authorities")
     public List<String> getAuthoritiesAsString() {
         return authorities.stream()
@@ -47,7 +45,7 @@ public class CustomUserDetails implements UserDetails {
         return authorities;
     }
     public Long getId() {
-        return userEntity.getId();
+        return userDto.getId();
     }
 
     @Override
@@ -57,7 +55,7 @@ public class CustomUserDetails implements UserDetails {
 
     @Override
     public String getUsername() {
-        return userEntity.getUserName();
+        return userDto.getUsername();
     }
 
     @Override

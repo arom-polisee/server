@@ -13,6 +13,19 @@ public class KakaoConfig {
     private String clientId;
 
     @Value("${spring.kakao.redirect-uri}")
-    private String redirectUri;
+    private String redirect_uri;
+
+    @Value("${spring.kakao.scope}")
+    private String scope;
+
+    @Value("${spring.kakao.authorization-uri}")
+    private String authorization_uri;
+
+
+    @Value("${spring.kakao.token-uri}")
+    private String token_uri;
+
+    @Value("${spring.kakao.user-info-uri}")
+    private String user_info_uri;
 
 }

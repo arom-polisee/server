@@ -3,6 +3,7 @@ package com.arom.polisee.global.login.jwt;
 import com.arom.polisee.global.login.common.BaseResponse;
 import com.arom.polisee.global.login.common.BaseResponseStatus;
 import com.arom.polisee.global.login.dto.CustomUserDetails;
+import com.arom.polisee.global.login.dto.UserDto;
 import com.arom.polisee.global.login.service.CustomUserDetailsService;
 import com.arom.polisee.global.login.service.RedisCacheService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -31,7 +32,10 @@ public class JwtFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
 
-        if (request.getRequestURI().startsWith("/auth/")) {
+        String requestUri = request.getRequestURI();
+
+
+        if (requestUri.startsWith("/auth/") || requestUri.equals("/favicon.ico")) {
             filterChain.doFilter(request, response);
             return;
         }
@@ -49,12 +53,14 @@ public class JwtFilter extends OncePerRequestFilter {
         if (token != null && jwtProvider.validateToken(token)) {
             Long userId = jwtProvider.getUserIdFromToken(token);
 
-            CustomUserDetails customUserDetails = (CustomUserDetails) redisCacheService.getUserDetails(userId);
+            UserDto JwtuserDto = redisCacheService.getUserDetails(userId);
 
-            if (customUserDetails == null) {
-                customUserDetails = customUserDetailsService.loadUserById(userId);
-                redisCacheService.saveUserDetails(customUserDetails);
+            if (JwtuserDto == null) {
+                JwtuserDto = customUserDetailsService.loadUserById(userId);
+                redisCacheService.saveUserDetails(JwtuserDto);
             }
+
+            CustomUserDetails customUserDetails = new CustomUserDetails(JwtuserDto);
 
 
             UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(

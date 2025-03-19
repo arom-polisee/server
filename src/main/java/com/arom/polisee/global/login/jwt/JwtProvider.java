@@ -1,5 +1,6 @@
 package com.arom.polisee.global.login.jwt;
 
+import com.arom.polisee.global.login.dto.UserDto;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import lombok.extern.slf4j.Slf4j;
@@ -21,9 +22,13 @@ public class JwtProvider {
     }
 
     // JWT 생성
-    public String createAccessToken(Long userId) {
+    public String createAccessToken(UserDto userDto) {
+        Claims claims = Jwts.claims();
+        claims.put("userId", userDto.getId());
+        claims.put("username", userDto.getUsername());
+        claims.put("role", userDto.getRole());
         return Jwts.builder()
-                .setSubject(String.valueOf(userId))
+                .setClaims(claims)
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + ACCESS_TOKEN_EXPIRE_TIME))
                 .signWith(KEY)
@@ -38,7 +43,7 @@ public class JwtProvider {
                     .build()
                     .parseClaimsJws(token)
                     .getBody();
-            log.info("토큰 검증 완료 - userId : {}, 만료시간 : {}", claims.getSubject(),claims.getExpiration());
+            log.info("토큰 검증 완료 - userId : {}, role : {}, 만료시간 : {}", claims.get("userId"),claims.get("role"), claims.getExpiration());
             return true;
         } catch (JwtException | IllegalArgumentException e) {
             log.error("JWT 검증 실패 : {}", e.getMessage());
@@ -48,12 +53,14 @@ public class JwtProvider {
 
     // JWT에서 사용자 ID 추출
     public Long getUserIdFromToken(String token) {
-        return Long.valueOf(Jwts.parserBuilder()
-                .setSigningKey(KEY)
+        Claims claims = Jwts.parserBuilder()
+                .setSigningKey(KEY) // 시크릿 키 설정
                 .build()
                 .parseClaimsJws(token)
-                .getBody()
-                .getSubject());
+                .getBody();
+
+        return Long.valueOf(claims.get("userId").toString());
+
     }
 
 }

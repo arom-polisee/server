@@ -1,6 +1,7 @@
 package com.arom.polisee.global.login.service;
 
 import com.arom.polisee.global.login.dto.CustomUserDetails;
+import com.arom.polisee.global.login.dto.UserDto;
 import com.arom.polisee.global.login.entity.UserEntity;
 import com.arom.polisee.global.login.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -20,14 +21,12 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        UserEntity userEntity = userRepository.findByUserName(username)
-                .orElseThrow(() -> new UsernameNotFoundException("유저 정보 없음 : " + username));
-        return new CustomUserDetails(userEntity);
+        throw new UsernameNotFoundException("JWT 기반 인증에서는 사용 X");
     }
 
-    public CustomUserDetails loadUserById(Long userId) {
+    public UserDto loadUserById(Long userId) {
         UserEntity userEntity = userRepository.findById(userId)
                 .orElseThrow(() -> new UsernameNotFoundException("유저 정보 없음 : " + userId));
-        return new CustomUserDetails(userEntity);
+        return UserDto.fromEntity(userEntity);
     }
 }

@@ -22,12 +22,12 @@ public class TokenService {
     private final ObjectMapper objectMapper = new ObjectMapper();
 
     public String getKakaoAccessToken(String code) {
-        String requestURL = "https://kauth.kakao.com/oauth/token";
+        String requestURL = kakaoConfig.getToken_uri();
 
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
         params.add("grant_type", "authorization_code");
         params.add("client_id", kakaoConfig.getClientId());
-        params.add("redirect_uri", kakaoConfig.getRedirectUri());
+        params.add("redirect_uri", kakaoConfig.getRedirect_uri());
         params.add("code", code);
 
         HttpEntity<MultiValueMap<String, String>> requestEntity = new HttpEntity<>(params, createHeaders());
@@ -46,7 +46,7 @@ public class TokenService {
     }
 
     public LoginResponseDto getUserInfoFromToken(@RequestHeader("Authorization") String accessToken) {
-        String url = "https://kapi.kakao.com/v2/user/me";
+        String url = kakaoConfig.getUser_info_uri();
         LoginResponseDto loginResponseDto = null;
 
         // HTTP 요청 헤더 설정
@@ -74,11 +74,11 @@ public class TokenService {
     }
 
     public String getKakaoAuthUrl() {
-        return "https://kauth.kakao.com/oauth/authorize"
+        return kakaoConfig.getAuthorization_uri()
                 + "?client_id=" + kakaoConfig.getClientId()
-                + "&redirect_uri=" + kakaoConfig.getRedirectUri()
+                + "&redirect_uri=" + kakaoConfig.getRedirect_uri()
                 + "&response_type=code"
-                + "&scope=profile_nickname";
+                + "&scope=" + kakaoConfig.getScope();
 
     }
 

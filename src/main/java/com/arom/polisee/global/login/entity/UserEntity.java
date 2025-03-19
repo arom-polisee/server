@@ -26,10 +26,11 @@ public class UserEntity {
     private Long kakaoId;
 
     @Column(name = "user_name", nullable = false)
-    private String userName;
+    private String username;
 
-    @Column(name = "role")
-    private String role;
+    @Column(name = "role", nullable = false)
+    @Enumerated(EnumType.STRING)
+    private Role role;
 
     @Column(name = "created_at", updatable = false)
     @CreationTimestamp

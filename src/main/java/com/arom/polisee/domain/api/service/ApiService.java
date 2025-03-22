@@ -1,8 +1,8 @@
 package com.arom.polisee.domain.api.service;
 
 
-import com.arom.polisee.domain.policies.service.PolicyService;
-import com.arom.polisee.domain.policy_requirements.service.PolicyRequirementsService;
+import com.arom.polisee.domain.policy_detail.service.PoliciyDetailService;
+import com.arom.polisee.domain.policies.service.PoliciesService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -14,14 +14,14 @@ import org.springframework.stereotype.Service;
 
 public class ApiService {
 
-    private final PolicyService policyService;
-    private final PolicyRequirementsService policyRequirementsService;
+    private final PoliciyDetailService policiyDetailService;
+    private final PoliciesService policiesService;
 
     public void fetchPolicyRequirements(int perPage) {
         int page = 1;
         boolean hasMore = true;
         while (hasMore) {
-            hasMore = policyRequirementsService.fetchPoliciesRequirements(page, perPage);
+            hasMore = policiesService.fetchPoliciesRequirements(page, perPage);
             page++;
         }
     }
@@ -29,7 +29,7 @@ public class ApiService {
         int page = 1;
         boolean hasMore = true;
         while (hasMore) {
-            hasMore = policyService.fetchPolicies(page, perPage);
+            hasMore = policiyDetailService.fetchPolicies(page, perPage);
             page++;
         }
     }

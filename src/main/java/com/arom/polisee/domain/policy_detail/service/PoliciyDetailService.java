@@ -1,10 +1,10 @@
-package com.arom.polisee.domain.policies.service;
+package com.arom.polisee.domain.policy_detail.service;
 
-import com.arom.polisee.domain.api.dto.PoliciesResponseDto;
+import com.arom.polisee.domain.api.dto.PolicyDetailResponseDto;
+import com.arom.polisee.domain.policy_detail.entity.PoliciyDetail;
+import com.arom.polisee.domain.policy_detail.repository.PoliciyDetailRepository;
 import com.arom.polisee.domain.policies.entity.Policies;
 import com.arom.polisee.domain.policies.repository.PoliciesRepository;
-import com.arom.polisee.domain.policy_requirements.entity.PolicyRequirements;
-import com.arom.polisee.domain.policy_requirements.repository.PolicyRequirementsRepository;
 import com.arom.polisee.global.exception.BaseException;
 import com.arom.polisee.global.exception.error.ErrorCode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -28,9 +28,9 @@ import java.util.Optional;
 @Slf4j
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
-public class PolicyService {
-    private final PolicyRequirementsRepository policyRequirementsRepository;
+public class PoliciyDetailService {
     private final PoliciesRepository policiesRepository;
+    private final PoliciyDetailRepository policiyDetailRepository;
 
     private static final String BASE_URL = "https://api.odcloud.kr/api";
     private static final String POLICY_API = "/gov24/v3/serviceList";
@@ -53,16 +53,16 @@ public class PolicyService {
 
             String jsonResponse = sendGetRequest(urlString);
             if (jsonResponse == null) return false;
-            PoliciesResponseDto response = parseJsonToPolicyResponse(jsonResponse);
+            PolicyDetailResponseDto response = parseJsonToPolicyResponse(jsonResponse);
 
             if (response == null || response.getData() == null || response.getData().isEmpty()) {
                 log.info("✅정책 데이터 읽기 종료");
                 return false;
             }
 
-            List<Policies> policiesList = response.getData().stream()
+            List<PoliciyDetail> policiyDetailList = response.getData().stream()
                     .map(dto -> {
-                        Optional<PolicyRequirements> policyRequirements = policyRequirementsRepository.findById(dto.getId());
+                        Optional<Policies> policyRequirements = policiesRepository.findById(dto.getId());
 
                         // policyRequirements가 존재하지 않으면 null 반환
                         if (policyRequirements.isEmpty()) {
@@ -70,16 +70,16 @@ public class PolicyService {
                             return null;
                         }
 
-                        Policies policies = new Policies();
-                        policies.setId(policyRequirements.get().getId());
-                        policies.fromDto(dto);
-                        policies.setPolicyRequirements(policyRequirements.get());
-                        return policies;
+                        PoliciyDetail policiyDetail = new PoliciyDetail();
+                        policiyDetail.setId(policyRequirements.get().getId());
+                        policiyDetail.fromDto(dto);
+                        policiyDetail.setPolicies(policyRequirements.get());
+                        return policiyDetail;
                     })
                     .filter(Objects::nonNull) // null 값 제거
                     .toList();
 
-            policiesRepository.saveAll(policiesList);
+            policiyDetailRepository.saveAll(policiyDetailList);
             return true;
 
         } catch (Exception e) {
@@ -112,9 +112,9 @@ public class PolicyService {
             throw BaseException.from(ErrorCode.INTERNAL_SERVER_ERROR,e.getMessage());
         }
     }
-    private PoliciesResponseDto parseJsonToPolicyResponse(String json) {
+    private PolicyDetailResponseDto parseJsonToPolicyResponse(String json) {
         try {
-            return objectMapper.readValue(json, PoliciesResponseDto.class);
+            return objectMapper.readValue(json, PolicyDetailResponseDto.class);
         } catch (Exception e) {
             throw BaseException.from(ErrorCode.JSON_PARSING_ERROR,e.getMessage());
         }

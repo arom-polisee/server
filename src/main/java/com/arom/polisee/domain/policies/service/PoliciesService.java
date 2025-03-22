@@ -1,8 +1,8 @@
-package com.arom.polisee.domain.policy_requirements.service;
+package com.arom.polisee.domain.policies.service;
 
-import com.arom.polisee.domain.api.dto.PoliciesRequirementsResponseDto;
-import com.arom.polisee.domain.policy_requirements.entity.PolicyRequirements;
-import com.arom.polisee.domain.policy_requirements.repository.PolicyRequirementsRepository;
+import com.arom.polisee.domain.api.dto.PoliciesResponseDto;
+import com.arom.polisee.domain.policies.entity.Policies;
+import com.arom.polisee.domain.policies.repository.PoliciesRepository;
 import com.arom.polisee.global.exception.BaseException;
 import com.arom.polisee.global.exception.error.ErrorCode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -24,8 +24,8 @@ import java.util.List;
 @Slf4j
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
-public class PolicyRequirementsService {
-    private final PolicyRequirementsRepository policyRequirementsRepository;
+public class PoliciesService {
+    private final PoliciesRepository policiesRepository;
 
     private static final String BASE_URL = "https://api.odcloud.kr/api";
     private static final String POLICY_DETAIL_API = "/gov24/v3/supportConditions";
@@ -49,21 +49,21 @@ public class PolicyRequirementsService {
             String jsonResponse = sendGetRequest(urlString);
             if (jsonResponse == null) return false;
 
-            PoliciesRequirementsResponseDto response = parseJsonToPolicyDetailResponse(jsonResponse);
+            PoliciesResponseDto response = parseJsonToPolicyDetailResponse(jsonResponse);
 
             if (response == null || response.getData() == null || response.getData().isEmpty()) {
                 log.info("더 이상 받아올 정책이 없습니다");
                 return false;
             }
 
-            List<PolicyRequirements> policyRequirementsList = response.getData().stream()
+            List<Policies> policiesList = response.getData().stream()
                     .map(dto -> {
-                        PolicyRequirements policyRequirements = new PolicyRequirements();
-                        policyRequirements.setId(dto.getId());
-                        policyRequirements.fromDto(dto);
-                        return policyRequirements;
+                        Policies policies = new Policies();
+                        policies.setId(dto.getId());
+                        policies.fromDto(dto);
+                        return policies;
                     }).toList();
-            policyRequirementsRepository.saveAll(policyRequirementsList);
+            policiesRepository.saveAll(policiesList);
             return true;
 
         } catch (Exception e) {
@@ -98,9 +98,9 @@ public class PolicyRequirementsService {
         }
     }
 
-    private PoliciesRequirementsResponseDto parseJsonToPolicyDetailResponse(String json) {
+    private PoliciesResponseDto parseJsonToPolicyDetailResponse(String json) {
         try {
-            return objectMapper.readValue(json, PoliciesRequirementsResponseDto.class);
+            return objectMapper.readValue(json, PoliciesResponseDto.class);
         } catch (Exception e) {
             throw BaseException.from(ErrorCode.JSON_PARSING_ERROR,e.getMessage());
         }

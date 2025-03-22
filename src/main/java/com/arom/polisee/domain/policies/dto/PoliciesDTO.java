@@ -1,75 +1,149 @@
 package com.arom.polisee.domain.policies.dto;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
-import lombok.Setter;
 
 @Getter
-@Setter
-@JsonIgnoreProperties(ignoreUnknown = true)
 public class PoliciesDTO {
 
     @JsonProperty("서비스ID")
-    private String id;  // PK
+    private String id;
 
     @JsonProperty("서비스명")
     private String name;
 
-    @JsonProperty("등록일시")
-    private String registerDate;   // 등록 일시
+    @JsonProperty("JA0101")
+    private String JA0101;
 
-    @JsonProperty("부서명")
-    private String departmentName;
+    @JsonProperty("JA0102")
+    private String JA0102;
 
-    @JsonProperty("상세조회URL")
-    private String detailUrl;
+    @JsonProperty("JA0110")
+    private Integer JA0110;
 
-    @JsonProperty("서비스목적요약")
-    private String servicePurposeSummary;
+    @JsonProperty("JA0111")
+    private Integer JA0111;
 
-    @JsonProperty("서비스분야")
-    private String serviceField;
+    @JsonProperty("JA0201")
+    private String JA0201;
+    @JsonProperty("JA0202")
+    private String JA0202;
+    @JsonProperty("JA0203")
+    private String JA0203;
+    @JsonProperty("JA0204")
+    private String JA0204;
+    @JsonProperty("JA0205")
+    private String JA0205;
+    @JsonProperty("JA0301")
+    private String JA0301;
+    @JsonProperty("JA0302")
+    private String JA0302;
+    @JsonProperty("JA0303")
+    private String JA0303;
+    @JsonProperty("JA0313")
+    private String JA0313;
+    @JsonProperty("JA0314")
+    private String JA0314;
+    @JsonProperty("JA0315")
+    private String JA0315;
 
-    @JsonProperty("선정기준")
-    private String selectionCriteria;
+    @JsonProperty("JA0316")
+    private String JA0316;
 
-    @JsonProperty("소관기관명")
-    private String agencyName;
+    @JsonProperty("JA0317")
+    private String JA0317;
 
-    @JsonProperty("소관기관유형")
-    private String agencyType;
+    @JsonProperty("JA0318")
+    private String JA0318;
 
-    @JsonProperty("소관기관코드")
-    private String agencyCode;
+    @JsonProperty("JA0319")
+    private String JA0319;
 
-    @JsonProperty("수정일시")
-    private String updatedDatetime; // 수정 일시 (문자열 예시)
+    @JsonProperty("JA0320")
+    private String JA0320;
 
-    @JsonProperty("신청기한")
-    private String applicationDeadline;
+    @JsonProperty("JA0322")
+    private String JA0322;
 
-    @JsonProperty("신청방법")
-    private String applicationMethod;
+    @JsonProperty("JA0326")
+    private String JA0326;
 
-    @JsonProperty("전화문의")
-    private String contactNumber;
+    @JsonProperty("JA0327")
+    private String JA0327;
 
-    @JsonProperty("접수기관")
-    private String receptionAgency;
+    @JsonProperty("JA0328")
+    private String JA0328;
 
-    @JsonProperty("조회수")
-    private Integer viewCount; // 정수형 조회수
+    @JsonProperty("JA0329")
+    private String JA0329;
 
-    @JsonProperty("지원내용")
-    private String supportContents;
+    @JsonProperty("JA0330")
+    private String JA0330;
 
-    @JsonProperty("지원대상")
-    private String supportTarget;
+    @JsonProperty("JA0401")
+    private String JA0401;
 
-    @JsonProperty("지원유형")
-    private String supportType;
+    @JsonProperty("JA0402")
+    private String JA0402;
 
-    @JsonProperty("사용자구분")
-    private String remarks;
+    @JsonProperty("JA0403")
+    private String JA0403;
+
+    @JsonProperty("JA0404")
+    private String JA0404;
+
+    @JsonProperty("JA0410")
+    private String JA0410;
+
+    @JsonProperty("JA0411")
+    private String JA0411;
+
+    @JsonProperty("JA0412")
+    private String JA0412;
+
+    @JsonProperty("JA0413")
+    private String JA0413;
+
+    @JsonProperty("JA0414")
+    private String JA0414;
+
+    @JsonProperty("JA1101")
+    private String JA1101;
+
+    @JsonProperty("JA1102")
+    private String JA1102;
+
+    @JsonProperty("JA1103")
+    private String JA1103;
+
+    @JsonProperty("JA1201")
+    private String JA1201;
+
+    @JsonProperty("JA1202")
+    private String JA01202;
+
+    @JsonProperty("JA1299")
+    private String JA1299;
+
+    @JsonProperty("JA2101")
+    private String JA2101;
+
+    @JsonProperty("JA2102")
+    private String JA2102;
+
+    @JsonProperty("JA2103")
+    private String JA2103;
+
+    @JsonProperty("JA2201")
+    private String JA2201;
+
+    @JsonProperty("JA2202")
+    private String JA2202;
+
+    @JsonProperty("JA2203")
+    private String JA2203;
+
+    @JsonProperty("JA2299")
+    private String JA2299;
 }
+

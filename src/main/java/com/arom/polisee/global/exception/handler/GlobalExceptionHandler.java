@@ -17,6 +17,8 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(BaseException.class)
     public ErrorResponse onThrowException(BaseException baseException) {
+        log.error("⚠ Exception 발생: {} {}", baseException.getErrorCode(), baseException.getMessage());
         return ErrorResponse.generateErrorResponse(baseException);
     }
+
 }

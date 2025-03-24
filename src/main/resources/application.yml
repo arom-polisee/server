@@ -1,18 +1,22 @@
 spring:
+  application:
+    name: polisee
   datasource:
-    url: jdbc:mysql://localhost:3306/polisee
-    username: root
-    password:
+    url: jdbc:mysql://${DB_HOST}:${DB_PORT}/${DB_SCHEMA}?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
     driver-class-name: com.mysql.cj.jdbc.Driver
+
   jpa:
     hibernate:
-      ddl-auto: update
-    show-sql: true
-
-  data:
-    redis:
-      host: localhost
-      port: 6379
+      ddl-auto: create-drop
+    generate-ddl: true
+    show-sql: false
+    open-in-view: false
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL8Dialect
+        format_sql: true
 
   kakao:
     client-id: bd6499622dab0cd962a9b5c05eba5135
@@ -25,10 +29,11 @@ spring:
 jwt:
   secret: 3R2dp8G4F8Pbx2SyxB5K1Vyz5DZnB9YZdpZFeTFffS8?
 
+logging:
+  level:
+    root: INFO
+    com.arom_policy: INFO
 
-
-
-
-
-
-
+polisee:
+  api:
+    key: ${API_KEY}

@@ -1,7 +1,13 @@
 package com.arom.polisee.global.login.jwt;
 
+import com.arom.polisee.domain.user.Role;
+import com.arom.polisee.global.exception.BaseException;
+import com.arom.polisee.global.exception.error.ErrorCode;
 import com.arom.polisee.global.login.dto.UserDto;
-import io.jsonwebtoken.*;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.JwtException;
+import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -37,30 +43,43 @@ public class JwtProvider {
 
     public boolean validateToken(String token) {
         try {
-            Claims claims = Jwts
-                    .parserBuilder()
-                    .setSigningKey(KEY)
-                    .build()
-                    .parseClaimsJws(token)
-                    .getBody();
+            Claims claims = parseClaims(token);
             log.info("토큰 검증 완료 - userId : {}, role : {}, 만료시간 : {}", claims.get("userId"),claims.get("role"), claims.getExpiration());
             return true;
-        } catch (JwtException | IllegalArgumentException e) {
-            log.error("JWT 검증 실패 : {}", e.getMessage());
-            return false;
+        } catch (ExpiredJwtException e) {
+            log.error("만료된 JWT: {}", e.getMessage());
+            throw BaseException.from(ErrorCode.JWT_TOKEN_EXPIRED);
+        } catch (JwtException e) {
+            log.error("JWT 파싱 실패: {}", e.getMessage());
+            throw BaseException.from(ErrorCode.INVALID_JWT_TOKEN);
         }
     }
 
     // JWT에서 사용자 ID 추출
     public Long getUserIdFromToken(String token) {
-        Claims claims = Jwts.parserBuilder()
-                .setSigningKey(KEY) // 시크릿 키 설정
+        Claims claims = parseClaims(token);
+        return claims.get("userId", Long.class);
+    }
+
+    //JWT에서 사용자 이름 추출
+    public String getUsernameFromToken(String token) {
+        Claims claims = parseClaims(token);
+        return claims.get("username", String.class);
+    }
+
+    //JWT에서 사용자 권한 추출
+    public Role getRoleFromToken(String token) {
+        Claims claims = parseClaims(token);
+        String role = claims.get("role", String.class);
+        return Role.valueOf(role);
+    }
+
+
+    private Claims parseClaims(String token) {
+        return Jwts.parserBuilder()
+                .setSigningKey(KEY)
                 .build()
                 .parseClaimsJws(token)
                 .getBody();
-
-        return Long.valueOf(claims.get("userId").toString());
-
     }
-
 }

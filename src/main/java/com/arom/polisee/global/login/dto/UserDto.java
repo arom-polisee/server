@@ -1,9 +1,14 @@
 package com.arom.polisee.global.login.dto;
 
-import com.arom.polisee.global.login.entity.Role;
-import com.arom.polisee.global.login.entity.UserEntity;
+import com.arom.polisee.domain.user.Role;
+import com.arom.polisee.domain.user.User;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+
+import java.util.Collections;
+import java.util.List;
 
 @Getter
 @NoArgsConstructor
@@ -19,11 +24,19 @@ public class UserDto {
         this.username = username;
         this.role = role;
     }
-    public static UserDto fromEntity(UserEntity userEntity) {
+    public static UserDto fromEntity(User user) {
         return new UserDto(
-                userEntity.getId(),
-                userEntity.getUsername(),
-                userEntity.getRole()
+                user.getUserId(),
+                user.getUserName(),
+                user.getRole()
         );
+    }
+
+    public static UserDto fromJwt(Long id, String username, Role role) {
+        return new UserDto(id, username, role);
+    }
+
+    public List<GrantedAuthority> getAuthorities() {
+        return Collections.singletonList(new SimpleGrantedAuthority(this.role.name()));
     }
 }

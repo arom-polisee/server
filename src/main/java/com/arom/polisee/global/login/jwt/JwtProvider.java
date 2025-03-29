@@ -74,6 +74,15 @@ public class JwtProvider {
         return Role.valueOf(role);
     }
 
+    //JWT에서 userDto 추출
+    public UserDto getUserDto(String token) {
+        return UserDto.fromJwt(
+                getUserIdFromToken(token),
+                getUsernameFromToken(token),
+                getRoleFromToken(token)
+        );
+    }
+
 
     private Claims parseClaims(String token) {
         return Jwts.parserBuilder()

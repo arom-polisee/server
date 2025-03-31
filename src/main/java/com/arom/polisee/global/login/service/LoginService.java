@@ -20,16 +20,16 @@ public class LoginService {
 
     private final UserRepository userRepository;
     private final JwtProvider jwtProvider;
-    private final TokenService tokenService;
+    private final KakaoOAuthService kakaoOAuthService;
 
     public ResponseEntity<LoginResultDto> loginWithKakao(String code) {
 
         // Access Token 발급
-        String accessToken = tokenService.getKakaoAccessToken(code);
+        String accessToken = kakaoOAuthService.getKakaoAccessToken(code);
         log.info("카카오 Access Token : {} ", accessToken);
 
         // 카카오 유저 정보 요청
-        KakaoResponseDto userInfo = tokenService.getUserInfoFromToken(accessToken);
+        KakaoResponseDto userInfo = kakaoOAuthService.getUserInfoFromToken(accessToken);
         log.info("카카오 유저 정보 : {} ", userInfo);
 
         // 로그인 or 회원가입

@@ -21,7 +21,7 @@ import org.springframework.web.client.RestTemplate;
 @Service
 @Slf4j
 @RequiredArgsConstructor
-public class TokenService {
+public class KakaoOAuthService {
     private final KakaoConfig kakaoConfig;
     private final RestTemplate restTemplate = new RestTemplate();
     private final ObjectMapper objectMapper = new ObjectMapper();

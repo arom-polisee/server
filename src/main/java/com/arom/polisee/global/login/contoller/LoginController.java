@@ -3,7 +3,7 @@ package com.arom.polisee.global.login.contoller;
 import com.arom.polisee.global.exception.BaseException;
 import com.arom.polisee.global.exception.error.ErrorCode;
 import com.arom.polisee.global.login.service.LoginService;
-import com.arom.polisee.global.login.service.TokenService;
+import com.arom.polisee.global.login.service.KakaoOAuthService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -20,11 +20,11 @@ import org.springframework.web.bind.annotation.RestController;
 public class LoginController {
 
     private final LoginService loginService;
-    private final TokenService tokenService;
+    private final KakaoOAuthService kakaoOAuthService;
 
     @GetMapping("/login")
     public ResponseEntity<Void> getKakaoAuthUrl() {
-        String kakaoAuthUrl = tokenService.getKakaoAuthUrl();
+        String kakaoAuthUrl = kakaoOAuthService.getKakaoAuthUrl();
         return ResponseEntity.status(HttpStatus.FOUND)
                 .header("Location", kakaoAuthUrl)
                 .build();

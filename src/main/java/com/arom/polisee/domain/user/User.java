@@ -2,7 +2,7 @@ package com.arom.polisee.domain.user;
 
 import com.arom.polisee.domain.userInfo.UserInfo;
 import com.arom.polisee.global.entity.BaseEntity;
-import com.arom.polisee.domain.recommend_policy.RecommendPolicy;
+import com.arom.polisee.domain.recommend_policies.RecommendPolicies;
 import jakarta.persistence.Entity;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -39,7 +39,7 @@ public class User extends BaseEntity {
 
     // 2) user_recommend_policy 와 1:N
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<RecommendPolicy> recommendPolicies = new ArrayList<>();
+    private List<RecommendPolicies> recommendPolicies = new ArrayList<>();
 }
 
 

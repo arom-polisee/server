@@ -7,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 @Slf4j
@@ -15,15 +16,16 @@ public class PoliciesRepository {
     @PersistenceContext
     private EntityManager em;
 
-    public void save(Policies policy) {
-        em.persist(policy);
+    public void save(Policies policies) {
+        em.persist(policies);
     }
 
     public void saveAll(List<Policies> policies) {
-        for (Policies policy : policies) save(policy);
+        for (Policies newPolicies : policies) {
+            save(newPolicies);
+        }
     }
-
-    public Policies findByPolicyId(String policyId) {
-        return em.find(Policies.class, policyId);
+    public Optional<Policies> findById(String id) {
+        return Optional.ofNullable(em.find(Policies.class, id));
     }
 }

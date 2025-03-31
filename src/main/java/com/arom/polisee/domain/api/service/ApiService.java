@@ -17,11 +17,11 @@ public class ApiService {
     private final PoliciyDetailService policiyDetailService;
     private final PoliciesService policiesService;
 
-    public void fetchPolicyRequirements(int perPage) {
+    public void fetchPoliciesDetails(int perPage) {
         int page = 1;
         boolean hasMore = true;
         while (hasMore) {
-            hasMore = policiesService.fetchPoliciesRequirements(page, perPage);
+            hasMore = policiesService.fetchPoliciesDetails(page, perPage);
             page++;
         }
     }

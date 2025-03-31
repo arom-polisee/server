@@ -34,7 +34,7 @@ public class PoliciesService {
     private String API_KEY;
 
     @Transactional
-    public boolean fetchPoliciesRequirements(int page, int perPage) {
+    public boolean fetchPoliciesDetails(int page, int perPage) {
         try {
             String encodedServiceKey = URLEncoder.encode(API_KEY, StandardCharsets.UTF_8.toString());
 

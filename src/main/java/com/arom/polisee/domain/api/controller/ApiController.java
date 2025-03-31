@@ -21,7 +21,7 @@ public class ApiController {
     // 정책 리스트 저장
     @GetMapping("/policies/fetch")
     public String fetchPolicies() {
-        apiService.fetchPolicyRequirements(500);
+        apiService.fetchPoliciesDetails(500);
         apiService.fetchPolicies(500);
         return "정책 리스트 저장 완료!";
     }

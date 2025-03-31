@@ -1,6 +1,6 @@
 package com.arom.polisee.domain.policy_detail.repository;
 
-import com.arom.polisee.domain.policy_detail.entity.PoliciyDetail;
+import com.arom.polisee.domain.policy_detail.entity.PolicyDetail;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import lombok.extern.slf4j.Slf4j;
@@ -15,15 +15,15 @@ public class PoliciyDetailRepository {
     @PersistenceContext
     private EntityManager em;
 
-    public void save(PoliciyDetail policy) {
+    public void save(PolicyDetail policy) {
         em.persist(policy);
     }
 
-    public void saveAll(List<PoliciyDetail> policies) {
-        for (PoliciyDetail policy : policies) save(policy);
+    public void saveAll(List<PolicyDetail> policies) {
+        for (PolicyDetail policy : policies) save(policy);
     }
 
-    public PoliciyDetail findByPolicyId(String policyId) {
-        return em.find(PoliciyDetail.class, policyId);
+    public PolicyDetail findByPolicyId(String policyId) {
+        return em.find(PolicyDetail.class, policyId);
     }
 }

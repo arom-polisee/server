@@ -1,7 +1,7 @@
 package com.arom.polisee.domain.policy_detail.service;
 
 import com.arom.polisee.domain.api.dto.PolicyDetailResponseDto;
-import com.arom.polisee.domain.policy_detail.entity.PoliciyDetail;
+import com.arom.polisee.domain.policy_detail.entity.PolicyDetail;
 import com.arom.polisee.domain.policy_detail.repository.PoliciyDetailRepository;
 import com.arom.polisee.domain.policies.entity.Policies;
 import com.arom.polisee.domain.policies.repository.PoliciesRepository;
@@ -60,7 +60,7 @@ public class PoliciyDetailService {
                 return false;
             }
 
-            List<PoliciyDetail> policiyDetailList = response.getData().stream()
+            List<PolicyDetail> policyDetailList = response.getData().stream()
                     .map(dto -> {
                         Optional<Policies> policyRequirements = policiesRepository.findById(dto.getId());
 
@@ -70,16 +70,16 @@ public class PoliciyDetailService {
                             return null;
                         }
 
-                        PoliciyDetail policiyDetail = new PoliciyDetail();
-                        policiyDetail.setId(policyRequirements.get().getId());
-                        policiyDetail.fromDto(dto);
-                        policiyDetail.setPolicies(policyRequirements.get());
-                        return policiyDetail;
+                        PolicyDetail policyDetail = new PolicyDetail();
+                        policyDetail.setId(policyRequirements.get().getId());
+                        policyDetail.fromDto(dto);
+                        policyDetail.setPolicies(policyRequirements.get());
+                        return policyDetail;
                     })
                     .filter(Objects::nonNull) // null 값 제거
                     .toList();
 
-            policiyDetailRepository.saveAll(policiyDetailList);
+            policiyDetailRepository.saveAll(policyDetailList);
             return true;
 
         } catch (Exception e) {

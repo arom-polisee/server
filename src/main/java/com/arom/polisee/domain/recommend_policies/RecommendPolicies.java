@@ -14,7 +14,7 @@ import lombok.Setter;
         uniqueConstraints = {
                 @UniqueConstraint(
                         name = "uq_user_policy",
-                        columnNames = {"user_id", "service_id"}
+                        columnNames = {"user_id", "policies_id"}
                 )
         }
 )
@@ -22,14 +22,13 @@ public class RecommendPolicies extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "recommend_id")
-    private Long recommendId;
+    private Long id;
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
     @ManyToOne
-    @JoinColumn(name = "service_id", nullable = false)
+    @JoinColumn(name = "policies_id", nullable = false)
     private Policies policies;
 }

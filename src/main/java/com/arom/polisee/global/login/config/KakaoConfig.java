@@ -1,8 +1,9 @@
 package com.arom.polisee.global.login.config;
 
+import com.arom.polisee.global.exception.BaseException;
+import com.arom.polisee.global.exception.error.ErrorCode;
 import lombok.Getter;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -21,11 +22,15 @@ public class KakaoConfig {
     @Value("${spring.kakao.authorization-uri}")
     private String authorization_uri;
 
-
     @Value("${spring.kakao.token-uri}")
     private String token_uri;
 
     @Value("${spring.kakao.user-info-uri}")
     private String user_info_uri;
 
+    public void validate() {
+        if (clientId == null || redirect_uri == null || scope == null || authorization_uri == null) {
+            throw BaseException.from(ErrorCode.KAKAO_CONFIG_MISSING);
+        }
+    }
 }

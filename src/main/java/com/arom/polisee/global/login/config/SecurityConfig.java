@@ -1,31 +1,23 @@
 package com.arom.polisee.global.login.config;
 
+import com.arom.polisee.global.login.jwt.JwtAuthenticationEntryPoint;
 import com.arom.polisee.global.login.jwt.JwtFilter;
-import com.arom.polisee.global.login.repository.UserRepository;
-import com.arom.polisee.global.login.service.CustomUserDetailsService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity
+@RequiredArgsConstructor
 public class SecurityConfig {
     private final JwtFilter jwtFilter;
-
-    public SecurityConfig(JwtFilter jwtFilter) {
-        this.jwtFilter = jwtFilter;
-    }
-
-    @Bean
-    public UserDetailsService userDetailsService(UserRepository userRepository) {
-        return new CustomUserDetailsService(userRepository);
-    }
-
+    private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.csrf(csrf -> csrf.disable()); // CSRF 비활성화 (쿠키 기반 인증에서는 CSRF 보호 필요할 수도 있음)
@@ -33,6 +25,9 @@ public class SecurityConfig {
         http.formLogin((auth) -> auth.disable());
 
         http.httpBasic((auth) -> auth.disable());
+
+        http.exceptionHandling(e -> e
+                .authenticationEntryPoint(jwtAuthenticationEntryPoint));
 
         http.authorizeHttpRequests((auth) -> auth
                 .requestMatchers("/auth/**").permitAll()
@@ -47,4 +42,15 @@ public class SecurityConfig {
         return http.build();
 
     }
+    @Bean
+    public WebSecurityCustomizer webSecurityCustomizer() {
+        return web -> web.ignoring().requestMatchers(
+                "/favicon.ico",
+                "/static/**",
+                "/css/**",
+                "/js/**",
+                "/images/**"
+        );
+    }
+
 }

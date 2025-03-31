@@ -1,25 +1,35 @@
 package com.arom.polisee.global.login.service;
 
+import com.arom.polisee.global.exception.BaseException;
+import com.arom.polisee.global.exception.error.ErrorCode;
 import com.arom.polisee.global.login.config.KakaoConfig;
-import com.arom.polisee.global.login.dto.LoginResponseDto;
+import com.arom.polisee.global.login.dto.KakaoResponseDto;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.HashMap;
-
 @Service
+@Slf4j
 @RequiredArgsConstructor
-public class TokenService {
+public class KakaoOAuthService {
     private final KakaoConfig kakaoConfig;
     private final RestTemplate restTemplate = new RestTemplate();
     private final ObjectMapper objectMapper = new ObjectMapper();
+
+    @PostConstruct
+    public void validateConfig() {
+        kakaoConfig.validate(); // 애플리케이션 시작 시 호출
+    }
 
     public String getKakaoAccessToken(String code) {
         String requestURL = kakaoConfig.getToken_uri();
@@ -39,15 +49,18 @@ public class TokenService {
 
             JsonNode root = objectMapper.readTree(response.getBody());
             return root.path("access_token").asText();
+        }catch (HttpClientErrorException | HttpServerErrorException e) {
+            log.error("카카오 토큰 요청 실패 - 서버 오류: {}", e.getMessage());
+            throw BaseException.from(ErrorCode.KAKAO_TOKEN_REQUEST_FAILED);
         } catch (Exception e) {
-            e.printStackTrace();
-            throw new RuntimeException("카카오 토큰 요청 실패", e);
+            log.error("카카오 토큰 요청 실패: {}", e.getMessage());
+            throw BaseException.from(ErrorCode.KAKAO_TOKEN_REQUEST_FAILED);
         }
     }
 
-    public LoginResponseDto getUserInfoFromToken(@RequestHeader("Authorization") String accessToken) {
+    public KakaoResponseDto getUserInfoFromToken(@RequestHeader("Authorization") String accessToken) {
         String url = kakaoConfig.getUser_info_uri();
-        LoginResponseDto loginResponseDto = null;
+        KakaoResponseDto kakaoResponseDto = null;
 
         // HTTP 요청 헤더 설정
         HttpHeaders headers = createHeaders();
@@ -64,15 +77,18 @@ public class TokenService {
             Long kakaoId = root.path("id").asLong();
 
             // 사용자 정보 저장
-            loginResponseDto = new LoginResponseDto(kakaoId,username);
+            kakaoResponseDto = new KakaoResponseDto(kakaoId,username);
 
+        } catch (HttpClientErrorException | HttpServerErrorException e) {
+            log.error("카카오 API 호출 실패 - 서버 오류: {}", e.getMessage());
+            throw BaseException.from(ErrorCode.KAKAO_USER_INFO_REQUEST_FAILED);
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("카카오 사용자 정보 요청 중 예기치 못한 오류 발생: {}", e.getMessage());
+            throw BaseException.from(ErrorCode.KAKAO_USER_INFO_REQUEST_FAILED);
         }
 
-        return loginResponseDto;
+        return kakaoResponseDto;
     }
-
     public String getKakaoAuthUrl() {
         return kakaoConfig.getAuthorization_uri()
                 + "?client_id=" + kakaoConfig.getClientId()
@@ -81,7 +97,6 @@ public class TokenService {
                 + "&scope=" + kakaoConfig.getScope();
 
     }
-
     private HttpHeaders createHeaders() {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);

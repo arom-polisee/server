@@ -7,7 +7,10 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,20 +21,28 @@ import java.util.List;
 @Table(name = "user")
 public class User extends BaseEntity {
 
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_id")
     private Long userId;
 
-    @Column(nullable = false, length = 100)
-    private String email;
-
-    @Column(nullable = false, length = 100)
-    private String password;
+    @Column(name = "kakao_id", nullable = false)
+    private Long kakaoId;
 
     @Column(name = "user_name", nullable = false, length = 50)
     private String userName;
+
+    @Column(name = "role", nullable = false)
+    @Enumerated(EnumType.STRING)
+    private Role role;
+
+    @Column(name = "created_at", updatable = false)
+    @CreationTimestamp
+    private LocalDateTime createdAt;
+
+    @Column(name = "updated_at")
+    @UpdateTimestamp
+    private LocalDateTime updatedAt;
 
     // 1) user_info와 1:1
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, optional = false, fetch = FetchType.LAZY)

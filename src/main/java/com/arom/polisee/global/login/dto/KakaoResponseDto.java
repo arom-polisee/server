@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class LoginResponseDto {
-    private Long userId;
+public class KakaoResponseDto {
+    private Long kakaoId;
     private String username;
 }

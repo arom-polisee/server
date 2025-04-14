@@ -1,9 +1,8 @@
 package com.arom.polisee.domain.user;
 
 import com.arom.polisee.domain.userInfo.UserInfo;
-import com.arom.polisee.global.entity.BaseEntity;
 import com.arom.polisee.domain.recommend_policies.RecommendPolicies;
-import jakarta.persistence.Entity;
+import com.arom.polisee.global.entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;

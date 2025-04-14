@@ -58,7 +58,7 @@ public class KakaoOAuthService {
         }
     }
 
-    public KakaoResponseDto getUserInfoFromToken(@RequestHeader("Authorization") String accessToken) {
+    public KakaoResponseDto getUserInfoFromToken(String accessToken) {
         String url = kakaoConfig.getUser_info_uri();
         KakaoResponseDto kakaoResponseDto = null;
 
